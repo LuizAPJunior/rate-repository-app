@@ -1,11 +1,15 @@
 import { StyleSheet, Pressable } from "react-native";
 import Text from './Text';
 import { Link } from 'react-router-native';
+import theme from "../theme";
 
 const styles = StyleSheet.create({
      text:{
-      color: '#fff',
-      paddingLeft: 8
+        fontSize: theme.fontSizes.subheading,
+        fontFamily: theme.fonts.main,
+        fontWeight: theme.fontWeights.bold, 
+        color: '#fff',
+        paddingLeft: 8
      }
   });
 

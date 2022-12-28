@@ -14,6 +14,9 @@ const RepositoryItem = ({item}) => {
             borderRadius: 5
         },
         itemContainer:{
+            fontSize: theme.fontSizes.body,
+            fontFamily: theme.fonts.main,
+            fontWeight: theme.fontWeights.normal,
             padding: 10,
             marginBottom: 8,
             backgroundColor: '#fff'

@@ -8,6 +8,9 @@ import theme from '../theme';
 import SignIn from './SignIn';
 const styles = StyleSheet.create({
   container: {
+    fontSize: theme.fontSizes.body,
+    fontFamily: theme.fonts.main,
+    fontWeight: theme.fontWeights.normal,
     backgroundColor: theme.colors.mainBackground,
     flexGrow: 1,
     flexShrink: 1,
