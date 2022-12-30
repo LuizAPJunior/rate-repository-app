@@ -4,6 +4,12 @@ import Text from './Text';
 import { Formik} from 'formik';
 import theme from '../theme';
 import * as yup from 'yup';
+import useSignIn from '../hooks/useSignIn';
+
+import useAuthStorage from '../hooks/useAuthStorage';
+import { useNavigate } from "react-router-native";
+import { useApolloClient } from "@apollo/client";
+import { useEffect } from 'react';
 
 
 const styles = StyleSheet.create({
@@ -45,10 +51,30 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const [signIn,result] = useSignIn();
+  const navigate = useNavigate();
+  const apolloClient = useApolloClient();
+  const authStorage = useAuthStorage();
 
-  const onSubmit = (values) => {
-    console.log('your username is ', values.username);
-    console.log('your password is ', values.password);
+  useEffect(()=>{
+    const logged = async (data) =>{
+      await authStorage.setAccessToken(data.authenticate.accessToken);
+      navigate("/");
+      apolloClient.resetStore(); 
+    } 
+    if(result.data !==undefined){
+       logged(result.data);
+    } 
+  },[result]);
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+   
+    try {
+      await signIn({ username, password });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (

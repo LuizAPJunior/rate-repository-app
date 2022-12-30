@@ -14,7 +14,15 @@ const styles = StyleSheet.create({
   });
 
 
-const AppBarTab = ({children, path}) => {
+const AppBarTab = ({children, path="", handleOnPress}) => {
+    if(path===""){
+        return(
+            <Pressable onPress={handleOnPress}>
+                <Text fontWeight="bold" style={styles.text}>{children}</Text>
+            </Pressable>
+        );
+    }
+    
     return(
         <Pressable>
                 <Link to={path}>

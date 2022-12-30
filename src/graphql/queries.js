@@ -19,3 +19,12 @@ export const GET_REPOSITORIES = gql`
         }
     }
 `;
+
+export const LOGGED = gql`
+    query{
+        me{
+            id
+            username
+        }
+    }
+`

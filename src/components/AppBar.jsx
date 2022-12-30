@@ -2,6 +2,10 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import theme from '../theme';
 import AppBarTab from './AppBarTab';
+import { useApolloClient, useQuery } from '@apollo/client';
+import { LOGGED } from '../graphql/queries';
+import { useNavigate } from 'react-router-native';
+import useAuthStorage from '../hooks/useAuthStorage';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,15 +20,39 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const result = useQuery(LOGGED, {fetchPolicy: 'cache-and-network'});
+  const navigate = useNavigate();
+  const authStorage = useAuthStorage();
+  const apolloClient = useApolloClient();
+  if(result !==undefined){
+    if(result.data !== undefined){
+      if(result.data.me === null){
+        return(
+              <View style={styles.container}>
+                  <ScrollView horizontal>
+                      <AppBarTab path="/">Repositories</AppBarTab>
+                      <AppBarTab path="/signin">Sign In</AppBarTab>
+                  </ScrollView>
+              </View>
+        );
+      }
+    }
+  }  
+
+  const handleSignOut = async() => { 
+    navigate("/signin");
+    await authStorage.removeAccessToken();
+    apolloClient.resetStore();
+  }
+
   return(
-        <View style={styles.container}>
-                <ScrollView horizontal>
-                    <AppBarTab path="/">Repositories</AppBarTab>
-                    <AppBarTab path="/signin">Sign In</AppBarTab>
-                    
-                </ScrollView>
-        </View>
-    );
+    <View style={styles.container}>
+      <ScrollView horizontal>
+          <AppBarTab path="/">Repositories</AppBarTab>
+          <AppBarTab handleOnPress={handleSignOut} >Sign Out</AppBarTab>
+      </ScrollView>
+    </View>
+  );
 };
 
 export default AppBar;
