@@ -6,10 +6,9 @@ import theme from '../theme';
 import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 
-import useAuthStorage from '../hooks/useAuthStorage';
 import { useNavigate } from "react-router-native";
-import { useApolloClient } from "@apollo/client";
-import { useEffect } from 'react';
+
+
 
 
 const styles = StyleSheet.create({
@@ -51,27 +50,18 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
-  const [signIn,result] = useSignIn();
+  const [signIn] = useSignIn();
   const navigate = useNavigate();
-  const apolloClient = useApolloClient();
-  const authStorage = useAuthStorage();
+ 
 
-  useEffect(()=>{
-    const logged = async (data) =>{
-      await authStorage.setAccessToken(data.authenticate.accessToken);
-      navigate("/");
-      apolloClient.resetStore(); 
-    } 
-    if(result.data !==undefined){
-       logged(result.data);
-    } 
-  },[result]);
+
 
   const onSubmit = async (values) => {
     const { username, password } = values;
    
     try {
       await signIn({ username, password });
+      navigate("/");
     } catch (e) {
       console.log(e);
     }
