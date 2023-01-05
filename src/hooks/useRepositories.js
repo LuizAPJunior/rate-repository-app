@@ -8,7 +8,8 @@ const useRepositories =  (result) => {
   
   const fetchRepositories =  () => {
     setLoading(true);
-    const repositoriesResult = result? result.data? result.data.repositories: "" : "";
+    const {data} = result;
+    const repositoriesResult = data? data.repositories : "";
     
     setLoading(false);
     setRepositories(repositoriesResult);
