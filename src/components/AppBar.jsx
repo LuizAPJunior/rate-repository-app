@@ -24,25 +24,23 @@ const AppBar = () => {
   const navigate = useNavigate();
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
-  if(result !==undefined){
-    if(result.data !== undefined){
-      if(result.data.me === null){
-        return(
-              <View style={styles.container}>
-                  <ScrollView horizontal>
-                      <AppBarTab path="/">Repositories</AppBarTab>
-                      <AppBarTab path="/signin">Sign In</AppBarTab>
-                  </ScrollView>
-              </View>
-        );
-      }
-    }
-  }  
-
-  const handleSignOut = async() => { 
-    navigate("/signin");
+  const {data} = result;
+  
+  if(data?.me === null){
+    return(
+          <View style={styles.container}>
+              <ScrollView horizontal>
+                  <AppBarTab path="/">Repositories</AppBarTab>
+                  <AppBarTab path="/signin">Sign In</AppBarTab>
+              </ScrollView>
+          </View>
+    );
+  }
+    
+  const handleSignOut = async() => {  
     await authStorage.removeAccessToken();
     apolloClient.resetStore();
+    navigate("/signin");
   }
 
   return(
